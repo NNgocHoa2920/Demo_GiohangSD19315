@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Login";
+    var message = TempData["Status"];
+}
+
+<h2>Login</h2>
+<h5>@message</h5>
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="userName">Account Name:</label>
+        <input type="text" id="userName" name="userName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="passWord">Password:</label>
+        <input type="passWord" id="passWord" name="passWord" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+}
+
