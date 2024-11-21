@@ -95,7 +95,7 @@ namespace Demo_GiohangSD19315.Controllers
             {
                 //lưu dữ liệu login vào session vs key là cun
                 HttpContext.Session.SetString("cun", userName);
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","SanPham");
             }
         }
     }
