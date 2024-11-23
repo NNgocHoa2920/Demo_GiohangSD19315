@@ -1,10 +1,12 @@
 ﻿@{
     ViewBag.Title = "Login";
     var message = TempData["Status"];
+    var a = TempData["mess"];
 }
 
 <h2>Login</h2>
 <h5>@message</h5>
+<h5>@a</h5>
 
 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
 {

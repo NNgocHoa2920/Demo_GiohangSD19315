@@ -1,5 +1,7 @@
 ﻿using Demo_GiohangSD19315.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
+using X.PagedList.Extensions;
 
 namespace Demo_GiohangSD19315.Controllers
 {
@@ -12,20 +14,45 @@ namespace Demo_GiohangSD19315.Controllers
         }
 
         //lấy ra toàn bộ danh sách
-        public IActionResult Index()
+        public IActionResult Index(string name,int page=4, int pageSize=2)
         {
             //lấy giá trị session có tên là userName
             var sesiondata = HttpContext.Session.GetString("cun");
             if (sesiondata == null) // chưa đăng nhập
             {
-                ViewData["mess"] = "đăng nhập đi bạn ơi";
-                return View();
+                TempData["mess"] = "đăng nhập đi bạn ơi";
+                return RedirectToAction("Login","Account");
             }
             else
             {
                 ViewData["mess1"] = $"Mời {sesiondata} xem sản phẩm";
-                var data = _db.SanPhams.ToList();
-                return View(data);
+                //var data = _db.SanPhams.ToList();
+                //return View(data);
+            }
+            //lấ ra ds sanphaamm
+            var data = _db.SanPhams.ToPagedList(page, pageSize);
+
+            //check xem ô tìm kiếm có đc không
+            if(string.IsNullOrEmpty(name))
+            {
+                return View(data); // nếu k nhập thì hiện thị toàn bộ ds sản phẩm
+            }
+            else
+            {
+                var search = _db.SanPhams
+                    .Where(x=>x.SanPhamName.ToUpper().Contains(name.ToUpper()))
+                    .ToList();
+                //lưu số lượng tìm kiếm vào view data và viewbag
+                ViewData["count"] = search.Count;
+                ViewBag.Count = search.Count;
+                if (search.Count==0)
+                {
+                    return View(data);
+                }
+                else
+                {
+                    return View(search);
+                }
             }
         }
 
